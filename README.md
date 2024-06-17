@@ -103,11 +103,12 @@ ggplot(top_10, aes(x = salary_year_avg, y = reorder(job_title, -salary_year_avg)
         plot.title = element_text(size = 14, face = "bold"))
 ```
 Here is the bar graph that results from the above R code: (said here too many times!!!!!) (should i say above???)*
-![Top Paying Jobs](assets/top10jobs.pngtop10jobs.png)
+![Top Paying Jobs](assets/top10jobs.png)
 **The file path in the R code should be replaced with your actual path to the CSV file containing the top salaries data. The top salaries CSV file containing the results from the 1st analysis SQL query can be found here: [assets folder](/assets/)*
 *edit to the appropriate folder later after adding the csv file to it (a data folder within SQLProject), the current one just houses the image!!
 
-yo i have edits pls let me edit
+okay trying to fix the image again and sync changes omg
+
 
 
 
