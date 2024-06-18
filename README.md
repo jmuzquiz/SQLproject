@@ -3,7 +3,11 @@
 
 🔎 SQL Queries? Check them out here: [project_sql folder](/project_sql/) 
 
+edit
+
 # Background
+
+edit
 
 ## Dataset
 
@@ -35,6 +39,8 @@ For my exploration of the data scientist job market, I utilized:
 - **Git and GitHub:** Employed for version control and potential collaboration, enabling future sharing of SQL scripts and analysis with others.
 
 This project marked my first experience with these tools, allowing me to gain valuable skills in database management, SQL querying, version control, and preparing for potential collaboration on GitHub.
+
+edit
 
 # The Analysis
 Each query for this project aimed at investigating specific aspects of the data scientist job market. Here's how I approached each question:
@@ -70,8 +76,8 @@ Here's the breakdown of the top data scientist jobs in 2023:
 
 ### Visualizing Top Salaries
 
-Here is an example of R code that can be used to visualize the top 10 highest paying data scientist jobs based on average yearly salary, as identified from the 1st analysis query. 
-```R
+Here is an example of R code that can be used to visualize the top 10 highest paying data scientist jobs based on average yearly salary, as identified from the 1st analysis SQL query. 
+```r
 # Load necessary libraries
 library(ggplot2)
 library(readr) # For reading CSV file
@@ -104,16 +110,12 @@ ggplot(top_10, aes(x = salary_year_avg, y = reorder(job_title, -salary_year_avg)
 ```
 Here is the bar graph that results from the above R code: (said here too many times!!!!!) (should i say above???)*
 ![Top Paying Jobs](assets/top10jobs.png)
+
 **The file path in the R code should be replaced with your actual path to the CSV file containing the top salaries data. The top salaries CSV file containing the results from the 1st analysis SQL query can be found here: [assets folder](/assets/)*
 *edit to the appropriate folder later after adding the csv file to it (a data folder within SQLProject), the current one just houses the image!!
 
-okay trying to fix the image again and sync changes omg
-
-
-
-
-### 2. Skills for Top Paying Jobs
-To understand what skills are required for the top-paying jobs, I joined the job postings with the skills data, providing insights into what employers value for high-compensation roles.
+## 2. Skills for Top Paying Jobs
+To understand what skills are required for the top-paying data scientist jobs, I joined the job postings data with the skills data. The final result of this query included multiple rows for each job, with each row representing a job-skill combination. This provided valuable insights into the specific skills that employers prioritize for high-compensation roles.
 
 ```sql
 WITH top_paying_jobs AS (
@@ -128,7 +130,7 @@ WITH top_paying_jobs AS (
     LEFT JOIN
         company_dim ON job_postings_fact.company_id = company_dim.company_id
     WHERE
-        job_title_short = 'Data Analyst' AND
+        job_title_short = 'Data Scientist' AND
         job_location = 'Anywhere' AND
         salary_year_avg IS NOT NULL
     ORDER BY
@@ -145,16 +147,47 @@ INNER JOIN skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
 ORDER BY
     salary_year_avg DESC;
 ```
-Here's the breakdown of the most demanded skills for the top 10 highest paying data analyst jobs in 2023:
-- **SQL** is leading with a bold count of 8.
-- **Python** follows closely with a bold count of 7.
-- **Tableau** is also highly sought after, with a bold count of 6. Other skills like **R**, **Snowflake**, **Pandas**, and **Excel** show varying degress of demand.
+Here's the breakdown of the most demanded skills for the top 10 highest-paying data scientist jobs in 2023:
 
-*skill count for top 10 paying da jobs in 2023 graph
-*bar graph visualizing the count of skills for the top 10 paying jobs for data analysts; how this graph was generated
+- **Python** leads with a prominent count of 5.
+- **SQL** follows closely with a count of 4.
+- **AWS** is also highly sought after, with a count of 3.
+- Other skills such as **Java**, **GCP**, **TensorFlow**, and **Tableau** show varying degrees of demand.
+
+### Visualizing Skills for Top Paying Jobs
+
+Here is an example of R code that visualizes the count of skills for the top 10 highest paying data scientist jobs, based on the analysis conducted with the 2nd SQL query:
+
+```r
+# Load necessary library
+library(ggplot2)
+
+# Read the CSV file
+skills_data <- read.csv("top_paying_job_skills_data_scientist.csv")
+
+# Count the frequency of each skill
+skill_counts <- table(skills_data$skill)
+skill_counts <- as.data.frame(skill_counts)
+colnames(skill_counts) <- c("skill", "count")
+
+# Create a bar plot for skill counts with reversed order and gradient color
+ggplot(skill_counts, aes(x = reorder(skill, count), y = count, fill = count)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +  # Flip coordinates to make it horizontal
+  labs(title = "Skill Count for Top 10 Highest Paying Data Scientist Jobs",
+       x = "Skill",
+       y = "Frequency") +
+  scale_fill_gradient(low = "lightblue", high = "blue") +  # Gradient color
+  theme_minimal() +
+  theme(legend.position = "none")  # Hide the legend
+```
+Here is the bar graph that results from the above R code:
+![Top Paying Jobs](assets/top10payingskills.png)
+*say something about file path each time?
 
 ### 3. In-Demand Skills for Data Analysts
 This query helped identify the skills most frequently requested in job postings, directing focus to areas with high demand.
+This query identified and ranked the top 5 skills most in demand for data scientist roles that offer work-from-home opportunities. *should i say remote every time or clarify at beginning
 
 ```sql
 SELECT
@@ -164,7 +197,7 @@ FROM job_postings_fact
 INNER JOIN skills_job_dim ON job_postings_fact.job_id = skills_job_dim.job_id
 INNER JOIN skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
 WHERE
-    job_title_short = 'Data Analyst' AND
+    job_title_short = 'Data Scientist' AND
     job_work_from_home = TRUE
 GROUP BY
     skills
@@ -172,26 +205,37 @@ ORDER BY
     demand_count DESC
 LIMIT 5;
 ```
-Here's the breakdown of the most demanded skills for data analysts in 2023:
--**SQL** and **Excel** remain fundamental, emphasizing the need for strong foundational skills in data processing and spreadsheet manipulation.
--**Programming** and **Visualization Tools** like **Python**, **Tableau**, and **Power BI** are essential, pointing towards the increasing importance of technical skills in data storytelling and decision support.
+Here's the breakdown of the most demanded skills for data scientists in 2023:
+-**Python** and **SQL** remain fundamental, emphasizing the need for strong foundational skills in data manipulation, analysis, and machine learning model development.
+-**R**, **AWS**, and **Tableau** are also crucial, indicating high demand for statistical analysis, cloud computing skills, and advanced data visualization capabilities in complex data science projects.
 
-*make skills and demand count table
-*Table of the demand for the top 5 skills in data analyst job postings.
+### Top 5 In-Demand Skills for Data Scientists
+
+| Skills      | Demand Count |
+|-------------|--------------|
+| Python      | 10390        |
+| SQL         | 7488         |
+| R           | 4674         |
+| AWS         | 2593         |
+| Tableau     | 2458         |
+
+*Table of the top 5 most in-demand skills in data scientist job postings*
 
 ### 4. Skills Based on Salary
 Exploring the average salaries associated with different skills revealed which skills are the highest paying.
+This SQL query identifies and ranks the top 25 skills that are most in demand for data scientist roles offering work-from-home opportunities, based on their average yearly salaries. By exploring these average salaries, it reveals which skills are the highest paying and provides insights into their relative value in the data scientist job market.
+
 
 ```sql
 SELECT
     skills,
-    ROUND(AVG(salary_year_avg), 2) AS avg_salary
+    ROUND(AVG(salary_year_avg)) AS avg_salary
 FROM job_postings_fact
 INNER JOIN skills_job_dim ON job_postings_fact.job_id = skills_job_dim.job_id
 INNER JOIN skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
 WHERE
-    job_title_short = 'Data Analyst'
-    -- AND job_work_from_home = TRUE
+    job_title_short = 'Data Scientist'
+    AND job_work_from_home = TRUE
     AND salary_year_avg IS NOT NULL
 GROUP BY
     skills
@@ -201,10 +245,32 @@ LIMIT 25;
 ```
 Here's a breakdown of the results for the top paying skills for Data Analysts:
 -**High Demand for Big Data & ML Skills:** Top salaries are commanded by analysts skilled in big data technologies (PySpark, Couchbase), machine learning tools (DataRobot, Jupyter), and Python libraries (Pandas, NumPy), reflecting the industry's high valuation of data processing and predictive modeling capabilites.
--**Software Development & Deployment Proficiency:** Knowledge in development and deployment tools (GitLab, Kubernetes, Airflow) indicates a lucrative crossover between data analysis and engineering, with a premium on skills that facilitate automation and efficient data pipeline management.
+-**Software Development & Deployment Proficiency:** Knowledge in development and deployment tools (GitLab, Kubernetes, Airflow) indicates a lucrative crossover between data analysis and engineering, with a premium on skills that facilitate automation and efficient data pipeline management.**
 
-*make table of skills and avg salary
-*Table of the average salary for the top 10 paying skills for data analysts.
+### Breakdown of Top Skills for Data Scientists
+
+- **Advanced Programming Languages:** Skills in Golang and PHP showcase expertise in modern programming languages, essential for developing efficient and scalable data solutions.
+
+- **Data Analytics, Visualization, and Statistical Modeling:** Proficiency in tools like OpenCV, Neo4j, and Tidyverse highlights capabilities in advanced analytics, graph databases, statistical modeling, and data visualization, crucial for interpreting complex data, deriving insights, and optimizing data-driven processes.
+
+- **Business Intelligence and Compliance Tools:** Mastery of platforms such as MicroStrategy and GDPR tools reflects skills in translating complex data into actionable insights and ensuring compliance with data regulations.
+
+### Skills and Average Salaries
+
+| Skill        | Average Salary ($) |
+|--------------|--------------------|
+| gdpr         | 217,738            |
+| golang       | 208,750            |
+| atlassian    | 189,700            |
+| selenium     | 180,000            |
+| opencv       | 172,500            |
+| neo4j        | 171,655            |
+| microstrategy| 171,147            |
+| dynamodb     | 169,670            |
+| php          | 168,125            |
+| tidyverse    | 165,513            |
+
+*Table of the average salary for the top 10 paying skills for data scientists*
 
 ### 5. Most Optimal Skills to Learn
 Combining insights from demand and salary data, this query aimed to pinpoint skills that are both in high demand and have high salaries, offering a strategic focus for skill development.
