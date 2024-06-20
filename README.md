@@ -9,7 +9,7 @@
 
 The dataset used for this analysis originates from a comprehensive [SQL Course](https://lukebarousse.com/sql), featuring rich insights on job titles, salaries, locations, and essential skills. Job listings were gathered throughout 2023 using a specialized [app](https://datanerd.tech) developed by the course leader. The dataset is hosted externally on Google Drive. You can access it [here](https://drive.google.com/drive/folders/1moeWYoUtUklJO6NJdWo9OV8zWjRn0rjN).
 
-Additionally, CSV files generated from SQL queries that were used for data visualizations can be found [here](sql_query_csv_results/). Visualizations were created using R in RStudio. The R script file containing the code for SQL query 1 and 2 visualizations can be found [here](R_scripts/R_visualizations.R).
+Additionally, CSV files generated from SQL queries that were used for data visualizations can be found [here](sql_query_csv_results/). Visualizations were created using ggplot2 in RStudio. The R script file containing the code for SQL query 1 and 2 visualizations can be found [here](R_scripts/R_visualizations.R).
 
 ## Project Overview
 
